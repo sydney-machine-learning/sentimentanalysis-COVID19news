@@ -1,0 +1,265 @@
+from __future__ import annotations
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score, roc_auc_score, accuracy_score
+from torch import device
+from transformers import EvalPrediction
+from datasets import Dataset, DatasetDict
+from transformers import AutoTokenizer
+from transformers import EvalPrediction
+import numpy as np
+import torch
+from transformers import RobertaTokenizer, RobertaForSequenceClassification
+
+# Load the RoBERTa tokenizer
+# tokenizer = AutoTokenizer.from_pretrained("roberta-base")
+tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
+# model = RobertaForSequenceClassification.from_pretrained('roberta-base', num_labels=1)
+# model.to(device)
+# Read the CSV file into a DataFrame
+df = pd.read_csv('D:/UNSW/2024T1/MATH5925/code/labeledEn.csv')
+
+# Check the shape of data
+print(df.shape)
+
+# Print the first few rows of the DataFrame
+print(df.head())
+
+# Perform random sampling to reduce the dataset size
+sampled_df = df.sample(frac=0.5, random_state=42)
+
+# Split the dataset into training and validation sets
+train_df, val_df = train_test_split(sampled_df, test_size=0.2, random_state=42)
+
+# Create Dataset objects
+train_dataset = Dataset.from_pandas(train_df)
+val_dataset = Dataset.from_pandas(val_df)
+
+# Create DatasetDict object
+dataset = DatasetDict({
+    'train': train_dataset,
+    'validation': val_dataset
+})
+
+# Remove unnecessary columns
+dataset = dataset.remove_columns("__index_level_0__")
+
+# Check the dataset
+print(dataset)
+
+# Check the sample data
+example = dataset['train'][0]
+print(example)
+
+# Create a mapping relationship between label and its index
+labels = [label for label in dataset['train'].features.keys() if label not in ['ID', 'Tweet']]
+id2label = {idx: label for idx, label in enumerate(labels)}
+label2id = {label: idx for idx, label in enumerate(labels)}
+print(labels)
+
+
+def preprocess_data(examples):
+    # Take a batch of texts
+    text1 = examples["Tweet"]
+    # Encode them
+    encoding1 = tokenizer(text1, padding="max_length", truncation=True, max_length=128)
+    # Add labels
+    labels_batch = {k: examples[k] for k in examples.keys() if k in labels}
+    # Create numpy array of shape (batch_size, num_labels)
+    labels_matrix = np.zeros((len(text1), len(labels)))
+    # Fill numpy array
+    for idx, label in enumerate(labels):
+        labels_matrix[:, idx] = labels_batch[label]
+
+    encoding1["labels"] = labels_matrix.tolist()
+
+    return encoding1
+
+
+# Process all the data with the given function
+encoded_dataset = dataset.map(preprocess_data, batched=True, remove_columns=dataset['train'].column_names)
+
+# Check the features
+example = encoded_dataset['train'][0]
+print(example.keys())
+
+# Check the example
+decoded_text = tokenizer.decode(example['input_ids'])
+print(decoded_text)
+
+# Check the example's labels
+print(example['labels'])
+
+
+# Return the label
+# labels = [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
+# print(labels)
+
+# set the format of out data into standard PyTorch datasets
+encoded_dataset.set_format("torch")
+
+from transformers import AutoModelForSequenceClassification
+
+model = AutoModelForSequenceClassification.from_pretrained("roberta-base",
+                                                           problem_type="multi_label_classification",
+                                                           num_labels=len(labels),
+                                                           id2label=id2label,
+                                                           label2id=label2id)
+
+# define the batch size and the metrics to evaluate the model
+batch_size = 8
+metric_name = "f1"
+
+# Define the training hyperparameters, for example, we want to evaluate after every epoch of training
+# and save the results every epoch, learning rate and the batch size
+# and the number of epochs to train for
+from transformers import TrainingArguments, Trainer
+args = TrainingArguments(
+    f"roberta-finetuned-sem_eval-english",
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+    learning_rate=2e-5,
+    per_device_train_batch_size=batch_size,
+    per_device_eval_batch_size=batch_size,
+    num_train_epochs=3,
+    weight_decay=0.01,
+    load_best_model_at_end=True,
+    metric_for_best_model=metric_name,
+    # push_to_hub=True,
+)
+
+# Define the function to evaluate the results
+
+def multi_label_metrics(predictions, labels, threshold=0.5):
+    # Convert predictions to probabilities using sigmoid
+    sigmoid = torch.nn.Sigmoid()
+    probs = sigmoid(torch.Tensor(predictions))
+
+    # Convert probabilities to binary predictions using threshold
+    y_pred = torch.where(probs >= threshold, 1, 0).numpy()
+
+    # Compute evaluation metrics
+    y_true = labels
+    f1_micro_average = f1_score(y_true=y_true, y_pred=y_pred, average='micro')
+    roc_auc = roc_auc_score(y_true, y_pred, average='micro')
+    accuracy = accuracy_score(y_true, y_pred)
+
+    # Return metrics as a dictionary
+    metrics = {'f1': f1_micro_average,
+               'roc_auc': roc_auc,
+               'accuracy': accuracy}
+    return metrics
+
+def compute_metrics(p: EvalPrediction):
+    preds = p.predictions
+    labels = p.label_ids
+    result = multi_label_metrics(predictions=preds, labels=labels)
+    return result
+
+
+'''from accelerate import Accelerator, DataLoaderConfiguration
+dataloader_config = DataLoaderConfiguration(
+    dispatch_batches=None,
+    split_batches=False,
+    even_batches=True,
+    use_seedable_sampler=True
+)
+accelerator = Accelerator(dataloader_config=dataloader_config)'''
+
+# Check the label type
+print(encoded_dataset['train'][0]['labels'].type())
+
+# Check the encoding example
+print(encoded_dataset['train']['input_ids'][0])
+
+# Perform a forward pass to the RoBERTa model
+outputs = model(input_ids=encoded_dataset['train']['input_ids'][0].unsqueeze(0),
+                attention_mask=encoded_dataset['train']['attention_mask'][0].unsqueeze(0),
+                labels=encoded_dataset['train'][0]['labels'].unsqueeze(0))
+print(outputs)
+
+# Train the model
+trainer = Trainer(
+    model,
+    args,
+    train_dataset=encoded_dataset["train"],
+    eval_dataset=encoded_dataset["validation"],
+    tokenizer=tokenizer,
+    compute_metrics=compute_metrics
+)
+trainer.train()
+trainer.evaluate()
+
+
+def predict_labels(text, model, tokenizer, id2label, threshold=0.5):
+    # Tokenize the text
+    encoding = tokenizer(text, return_tensors="pt")
+    # Move the tensor to the device where the model is loaded
+    encoding = {k: v.to(model.device) for k, v in encoding.items()}
+    # Pass the device-adapted input to the pre-trained model
+    outputs = model(**encoding)
+    # The logits is a tensor that contains the scores for every individual label.
+    logits = outputs.logits
+
+    # Apply a sigmoid function independently to every score, such that every score is turned into a number between 0 and 1,
+    # that can be interpreted as a "probability" for how certain the model is that a given class belongs to the input text.
+    sigmoid = torch.nn.Sigmoid()
+    probs = sigmoid(logits.squeeze().cpu())
+    predictions = np.zeros(probs.shape)
+
+    # We use a threshold to turn every probability into either a 1 or a 0
+    if not any(probs >= threshold):
+        predictions[probs >= 0.3] = 1
+    else:
+        predictions[probs >= threshold] = 1
+
+    # Turn predicted id's into actual label names
+    predicted_labels = [id2label[idx] for idx, label in enumerate(predictions) if label == 1.0]
+    return predicted_labels
+
+text = "The movie was fantastic, and I thoroughly enjoyed every moment of it."
+predicted_labels = predict_labels(text, model, tokenizer, id2label, threshold=0.5)
+print(predicted_labels)
+
+# Define the directory to save the trained model
+output_model_dir = 'D:/UNSW/2024T1/MATH5925/model'
+
+# Create the directory if it does not exist
+import os
+if not os.path.exists(output_model_dir):
+    os.makedirs(output_model_dir)
+
+# Save the trained model to the specified directory
+model.save_pretrained(output_model_dir)
+tokenizer.save_pretrained(output_model_dir)
+
+# Load the trained RoBERTa model
+from transformers import RobertaForSequenceClassification
+loaded_model = RobertaForSequenceClassification.from_pretrained(output_model_dir)
+
+#Use the trained model to make prediction
+text = "I felt really sad after hearing the news about the accident."
+
+encoding = tokenizer(text, return_tensors="pt")
+encoding = {k: v.to(trainer.model.device) for k,v in encoding.items()}
+
+outputs = trainer.model(**encoding)
+#The logits is a tensor that contains the scores for every individual label.
+logits = outputs.logits
+print(logits.shape)
+
+# apply a sigmoid function independently to every score, such that every score is turned into a number between 0 and 1,
+#that can be interpreted as a "probability" for how certain the model is that a given class belongs to the input text.
+sigmoid = torch.nn.Sigmoid()
+probs = sigmoid(logits.squeeze().cpu())
+predictions = np.zeros(probs.shape)
+#we use a threshold (typically, 0.5) to turn every probability into either a 1 or a 0
+if not any(probs >= 0.5):
+    predictions = np.zeros(probs.shape)
+    predictions[probs >= 0.3] = 1
+else:
+    predictions = np.zeros(probs.shape)
+    predictions[probs >= 0.5] = 1
+# turn predicted id's into actual label names
+predicted_labels = [id2label[idx] for idx, label in enumerate(predictions) if label == 1.0]
+print(predicted_labels)
