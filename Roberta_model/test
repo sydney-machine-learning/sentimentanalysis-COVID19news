@@ -1,1 +1,4 @@
-test
+# This link is "glove.840B.300d.txt" and is a text file containing pre-trained word embeddings 
+# generated using the GloVe algorithm and trained on a large corpus of text data. 
+# Each word in the vocabulary is represented as a dense vector of 300 dimensions.
+# https://drive.google.com/file/d/1tYVke17Y9NC7qAb7EP9XzBneH2q7z_CL/view?usp=sharing
