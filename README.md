@@ -1,2 +1,15 @@
 # sentimentanalysis-COVID19news
 Sentiment Analysis of selected news articles pre and during COVID-19 pandemic
+
+Note the project uses dataset from Kaggle: Guardian News Articles. Kaggle. 
+https://www.kaggle.com/datasets/adityakharosekar2/guardian-news-articles
+
+And the SenWave dataset is from GitHub: SenWave: A Fine-Grained Sentiment Analysis Dataset for COVID-19 Tweets. 
+https://github.com/gitdevqiang/SenWave?tab=readme-ov-file#senwave-a-fine-grained-sentiment-analysis-dataset-for-covid-19-tweets
+Files
+The repository includes individual Jupyter Notebook files for BERT model, RoBERTa model and visualisation part, namely:
+
+fine_tune_bert_model.ipynb
+Roberta_finetune1.0.ipynb
+visualization.ipynb
+ngrams.ipynb
