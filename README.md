@@ -10,11 +10,13 @@ https://github.com/gitdevqiang/SenWave?tab=readme-ov-file#senwave-a-fine-grained
 The repository includes individual Jupyter Notebook files for BERT model, RoBERTa model and visualisation part, namely:
 
 model part:
+
 BERT_model/BERT_model.ipynb
 
 RoBERTa_model/Roberta_finetune1.0.ipynb
 
 Visualisation part:
+
 Visualisation/visualization2.ipynb
 
 Visualisation/target_ngrams.ipynb
