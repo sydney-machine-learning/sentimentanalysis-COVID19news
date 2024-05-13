@@ -1,4 +1,0 @@
-# This link is "glove.840B.300d.txt" and is a text file containing pre-trained word embeddings 
-# generated using the GloVe algorithm and trained on a large corpus of text data. 
-# Each word in the vocabulary is represented as a dense vector of 300 dimensions.
-# Download from: https://github.com/stanfordnlp/GloVe
