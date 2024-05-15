@@ -1,6 +1,6 @@
 # sentimentanalysis-COVID19news
 Sentiment Analysis of selected news articles pre and during COVID-19 pandemic
-
+# I'm still updating the code, sorry for the inconvenience.
 Note the project uses dataset from Kaggle: Guardian News Articles. Kaggle. 
 https://www.kaggle.com/datasets/adityakharosekar2/guardian-news-articles
 
