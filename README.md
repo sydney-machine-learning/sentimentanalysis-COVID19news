@@ -17,6 +17,8 @@ RoBERTa_model/Roberta_finetune1.0.ipynb
 
 Visualisation part:
 
+Note that the Jupyter Notebook files in the visualization section contains images of our results.
+
 Visualisation/visualization2.ipynb
 
 Visualisation/target_ngrams.ipynb
