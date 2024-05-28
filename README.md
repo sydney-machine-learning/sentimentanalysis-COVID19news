@@ -25,4 +25,4 @@ Visualisation/polarity_scores
 
 Our framework is produced by visio, the following is the URL: https://unsw-my.sharepoint.com/:u:/g/personal/z5427897_ad_unsw_edu_au/EW4Py1_GtdtLhjuj5xHRWjYBWmh_vkWNVqkMFsQkK0wwmw?e=yvtldM
 
-I'm still updating the code, sorry for the inconvenience.
+Here is the link to our Paper: Rohitash Chandra, Baicheng Zhu, Qingying Fang, Eka Shinjikashvili: https://arxiv.org/abs/2405.13056 
