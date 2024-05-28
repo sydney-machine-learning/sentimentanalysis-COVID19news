@@ -23,6 +23,10 @@ Visualisation/target_ngrams.ipynb
 
 Visualisation/polarity_scores
 
+Results part:
+
+We have article files labelled using two models, which we named BERT and RoBERTa.
+
 Our framework is produced by visio, the following is the URL: https://unsw-my.sharepoint.com/:u:/g/personal/z5427897_ad_unsw_edu_au/EW4Py1_GtdtLhjuj5xHRWjYBWmh_vkWNVqkMFsQkK0wwmw?e=yvtldM
 
 Here is the link to our Paper: Rohitash Chandra, Baicheng Zhu, Qingying Fang, Eka Shinjikashvili: https://arxiv.org/abs/2405.13056 
