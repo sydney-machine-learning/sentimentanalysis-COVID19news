@@ -1,6 +1,6 @@
 # This section contains our visualisations in sentiment analysis
 
-polarity_scores is a python code used to generate sentiment polarity scores under specific weights. (Note that it is not in jupyter notebook format.)
+polarity_scores.py is a python code used to generate sentiment polarity scores under specific weights. (Note that it is not in jupyter notebook format.)
 
 target_ngrams.ipynb is responsible for generating ngrams under target emotions and time periods
 
