@@ -18,7 +18,7 @@ for a detailed analysis. It's worth noting that the project also uses the Guardi
 [Guardian News Articles Dataset](https://www.kaggle.com/datasets/adityakharosekar2/guardian-news-articles)
 
 ### Load Dataset using Google Drive
-
+Note that the following code demonstration is mainly applied to the RoBERTa model.
 To load the dataset in Google Colab, follow these steps:
 
 1. **Mount Google Drive**: Use the command `drive.mount('/content/drive')` in your notebook to mount Google Drive.
@@ -32,7 +32,7 @@ file_path = "/content/drive/MyDrive/Colab Notebooks/labeledEn.csv"
 df = pd.read_csv(file_path)
 ```
 ### Saving DataFrames as CSV Files
-
+Note that the following code demonstration is mainly applied to the RoBERTa model.
 To save a Pandas DataFrame as a CSV file, you can use the `to_csv()` function. Here's how you can do it:
 
 ```python
@@ -54,7 +54,7 @@ RoBERTa_model/Roberta_finetune1.0.ipynb
 ### Saving a PyTorch Model
 
 To save a PyTorch model, you can use the `torch.save()` function. Here's how you can do it:
-
+Note that the following code demonstration is mainly applied to the RoBERTa model.
 ```python
 import torch
 
@@ -68,7 +68,7 @@ file_path = '/content/drive/MyDrive/RoBERTa_ft.pth'
 torch.save(model, f=file_path)
 ```
 
-Visualisation part:
+## Visualisation part:
 
 Note that the Jupyter Notebook files in the visualization section contains images of our results.
 
