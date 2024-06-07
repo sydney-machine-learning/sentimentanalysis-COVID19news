@@ -6,8 +6,10 @@ This repository provides code and supplementary materials for the paper entitled
 
 Here is the link to our Paper: Rohitash Chandra, Baicheng Zhu, Qingying Fang, Eka Shinjikashvili: https://arxiv.org/abs/2405.13056 
 
+Seminar: https://www.youtube.com/watch?v=TU6Vvoj4U5Y&ab_channel=transitional-ai
+
 Our framework is produced by visio, the following is the URL: https://unsw-my.sharepoint.com/:u:/g/personal/z5427897_ad_unsw_edu_au/EW4Py1_GtdtLhjuj5xHRWjYBWmh_vkWNVqkMFsQkK0wwmw?e=yvtldM
-# Preparing Dataset
+## Preparing Dataset
 
 We used a dataset of 10,000 manually labeled English tweets containing 10 different sentiments for training and testing.
 And the SenWave dataset is from GitHub: SenWave: A Fine-Grained Sentiment Analysis Dataset for COVID-19 Tweets. 
@@ -19,7 +21,7 @@ for a more detailed analysis.
 Note the project uses dataset from Kaggle: Guardian News Articles. Kaggle. 
 https://www.kaggle.com/datasets/adityakharosekar2/guardian-news-articles
 
-# Notebooks for project: main run code.
+## Notebooks for project: main run code.
 The repository includes individual Jupyter Notebook files for BERT model, RoBERTa model, visualisation and result part, namely:
 
 model part:
@@ -38,7 +40,7 @@ Visualisation/target_ngrams.ipynb
 
 Visualisation/polarity_scores.py
 
-# Results part
+## Results part
 
 We have article files labelled using two models, which we named BERT and RoBERTa.
 
