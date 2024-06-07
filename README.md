@@ -31,6 +31,16 @@ drive.mount('/content/drive')
 file_path = "/content/drive/MyDrive/Colab Notebooks/labeledEn.csv"
 df = pd.read_csv(file_path)
 ```
+### Saving DataFrames as CSV Files
+
+To save a Pandas DataFrame as a CSV file, you can use the `to_csv()` function. Here's how you can do it:
+
+```python
+# Assuming `sen_train` and `sen_test` are your Pandas DataFrames for the training and testing sets
+sen_train.to_csv("train.csv", index=False)
+sen_test.to_csv("test.csv", index=False)
+```
+
 
 ## Notebooks for project: main run code.
 The repository includes individual Jupyter Notebook files for BERT model, RoBERTa model, visualisation and result part, namely:
@@ -40,6 +50,23 @@ model part:
 BERT_model/BERT_model.ipynb
 
 RoBERTa_model/Roberta_finetune1.0.ipynb
+
+### Saving a PyTorch Model
+
+To save a PyTorch model, you can use the `torch.save()` function. Here's how you can do it:
+
+```python
+import torch
+
+# Assuming `model` is your PyTorch model
+model = ...
+
+# File path to save the model
+file_path = '/content/drive/MyDrive/RoBERTa_ft.pth'
+
+# Save the model
+torch.save(model, f=file_path)
+```
 
 Visualisation part:
 
