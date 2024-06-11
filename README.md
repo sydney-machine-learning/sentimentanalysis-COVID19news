@@ -2,9 +2,11 @@
 
 This repository provides code and supplementary materials for the paper titled 'Large language models for sentiment analysis of newspaper articles during COVID-19: The Guardian'.
 
-**Paper Link:** [Rohitash Chandra, Baicheng Zhu, Qingying Fang, Eka Shinjikashvili](https://arxiv.org/abs/2405.13056)
+## Seminar
+* t~ai Seminar Series, [Large language models for sentiment analysis of newspaper articles during COVID-19](https://www.youtube.com/watch?v=TU6Vvoj4U5Y)
 
-**Seminar Recording:** [YouTube](https://www.youtube.com/watch?v=TU6Vvoj4U5Y&ab_channel=transitional-ai)
+## Publication
+* Chandra, R., Zhu, B., Fang, Q., & Shinjikashvili, E. (2024). Large language models for sentiment analysis of newspaper articles during COVID-19: The Guardian. arXiv preprint arXiv:2405.13056: [arXiv paper](https://arxiv.org/abs/2405.13056)
 
 Our framework is produced by visio, and the URL is: [Visio Framework](https://unsw-my.sharepoint.com/:u:/g/personal/z5427897_ad_unsw_edu_au/EW4Py1_GtdtLhjuj5xHRWjYBWmh_vkWNVqkMFsQkK0wwmw?e=yvtldM)
 
