@@ -7,7 +7,9 @@ Australia news, UK news, World news and Opinion.
 Because our adjusted model is about 400MB, we use Google Drive to store it.
 Here is the fine_tuned RoBERTa model: 
 https://drive.google.com/file/d/1oOg8mb0OtHiwEHzivOhoHcCWjvxXhHWh/view?usp=sharing
- 
+The fine-tuned model was generated using `roberta_new.py` from this folder.
+If you want to run it, please use `load-roberta.py` to load it.
+
 Our labelled Guardian data is also very large and is stored in the Google Drive link below. 
 We have also prepared versions classified according to different sections, 
 namely Australia news, UK news, World news and Opinion.
